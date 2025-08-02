@@ -1,0 +1,65 @@
+{
+   "abstract" : "Respite based client/server using",
+   "author" : [
+      "['Paul Seamons <paul@seamons.com>', 'Jason Hall  <jayce@cpan.org>',]"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 5.043, CPAN::Meta::Converter version 2.150005",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : 2
+   },
+   "name" : "Respite",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Test::Pod" : "1.41"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "CGI::Ex" : "0",
+            "Data::Debug" : "0",
+            "Digest::MD5" : "0",
+            "End" : "0",
+            "FindBin" : "0",
+            "IO::Interactive" : "0",
+            "IO::Socket::SSL" : "0",
+            "JSON" : "0",
+            "Net::Server" : "0",
+            "Scalar::Util" : "0",
+            "Throw" : "0",
+            "Time::HiRes" : "0",
+            "perl" : "5.0080"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Sub::Override" : "0",
+            "Test::Deep" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/Jayceh/Respite/issues"
+      },
+      "homepage" : "https://github.com/Jayceh/Respite",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/Jayceh/Respite.git",
+         "web" : "https://github.com/Jayceh/Respite"
+      }
+   },
+   "version" : "0.2"
+}
+
