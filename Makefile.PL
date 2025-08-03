@@ -34,7 +34,7 @@ my %WriteMakefileArgs = (
     "Sub::Override" => 0,
     "Test::Deep" => 0
   },
-  "VERSION" => "0.2",
+  "VERSION" => "0.21",
   "test" => {
     "TESTS" => "t/*.t"
   }
