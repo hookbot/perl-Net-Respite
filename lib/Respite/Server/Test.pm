@@ -3,7 +3,7 @@ package Respite::Server::Test;
 use strict;
 use warnings;
 use Test::More;
-use POSIX qw(tmpnam);
+use File::Temp;
 use Throw qw(throw import);
 use Time::HiRes qw(sleep);
 use End;
@@ -25,10 +25,11 @@ sub setup_test_server {
         }) || throw "Could not create temp socket", {msg => $!};
         my $port = $sock->sockport || throw "Could not generate random usable sockport";
     };
-    my $tmpnam      = tmpnam();
+    my $tmpnam      = File::Temp->new;
     my $pid_file    = $args->{'pid_file'}    || "$tmpnam.$$.pid";
     my $access_file = $args->{'access_file'} || "$tmpnam.$$.access";
     my $error_file  = $args->{'error_file'}  || "$tmpnam.$$.error";
+    undef $tmpnam;
     my $no_brand    = exists($args->{'no_brand'}) ? 1 : 0;
     my $no_ssl      = exists($args->{'no_ssl'})   ? 1 : 0;
     #$no_ssl = 1;
@@ -215,8 +216,8 @@ Randomly chosen.
 
 =item pid_file, access_file, log_file
 
-File locations of the server files, defautls to tmpnam'ed files.  Auto
-cleaned up.
+File locations of the server files, defaults to File::Test files.
+Auto cleaned up.
 
 =item server_type
 
