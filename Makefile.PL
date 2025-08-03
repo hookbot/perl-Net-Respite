@@ -34,7 +34,7 @@ my %WriteMakefileArgs = (
     "Sub::Override" => 0,
     "Test::Deep" => 0
   },
-  "VERSION" => "0.21",
+  "VERSION_FROM" => "lib/Respite/Base.pm",
   "test" => {
     "TESTS" => "t/*.t"
   }
