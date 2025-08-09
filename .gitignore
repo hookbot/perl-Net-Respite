@@ -1,5 +1,6 @@
 Makefile
-MYMETA*
+META.*
+MYMETA.*
 *tar*
 *blib
 *old
