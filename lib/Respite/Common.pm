@@ -19,7 +19,19 @@ use strict;
 use warnings;
 
 our $config;
-sub _configs { $config || (eval { require config } or $config::config{'failed_load'} = $@) && ($config = config->load) }
+sub _configs {
+    return $config ||= do {
+        my $c = undef;
+        eval {
+            require config;
+            eval { $c = config->load };
+            $c ||= defined($config::config) && "HASH" eq ref $config::config && $config::config;
+            $c ||= %config::config ? \%config::config : undef;
+        };
+        "HASH" eq ref $c or $c = { failed_load => ($@ || "missing config::config hash") };
+        $c;
+    };
+}
 
 sub config {
     my ($self, $key, $def, $name) = @_;
