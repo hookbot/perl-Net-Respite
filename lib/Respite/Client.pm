@@ -24,11 +24,6 @@ BEGIN {
     } else { Throw->import('throw') }
 }
 
-sub new {
-    my ($class, $args) = @_;
-    return bless $args || {}, $class;
-}
-
 sub service_name { $_[0]->{'service_name'} || $_[0]->{'service'} || throw "Missing service_name" }
 
 sub run_method {

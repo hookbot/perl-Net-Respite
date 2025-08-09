@@ -18,6 +18,11 @@ package Respite::Common;
 use strict;
 use warnings;
 
+sub new {
+    my ($class, $args) = @_;
+    return bless {%{$args || {}}}, $class;
+}
+
 our $config;
 sub _configs {
     return $config ||= do {

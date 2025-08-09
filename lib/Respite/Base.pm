@@ -17,11 +17,6 @@ our $max_recurse = 10;
 my $JSON;
 sub json { $JSON ||= JSON->new->utf8->allow_unknown->allow_nonref->allow_blessed->convert_blessed->canonical }
 
-sub new {
-    my ($class, $args) = @_;
-    return bless $args || {}, $class;
-}
-
 sub SHARE {}
 
 ###----------------------------------------------------------------###
