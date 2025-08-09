@@ -30,7 +30,6 @@ my %WriteMakefileArgs = (
     "Time::HiRes" => 0
   },
   "TEST_REQUIRES" => {
-    "Sub::Override" => 0,
     "Test::Deep" => 0
   },
   "VERSION_FROM" => "lib/Respite/Base.pm",
@@ -51,7 +50,6 @@ my %FallbackPrereqs = (
   "JSON" => 0,
   "Net::Server" => 0,
   "Scalar::Util" => 0,
-  "Sub::Override" => 0,
   "Test::Deep" => 0,
   "Throw" => 0,
   "Time::HiRes" => 0

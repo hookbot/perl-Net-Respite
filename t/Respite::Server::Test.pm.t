@@ -4,26 +4,12 @@ use strict;
 use warnings;
 
 use Test::More tests => 12;
-use Sub::Override;
-
-use Respite::Base;   # Loading this here so we can override _configs
-use Respite::Server; # Loading this here so we can override _configs
-use Respite::Client; # Loading this here so we can override _configs
 
 use Respite::Server::Test qw(setup_test_server);
 
-sub _configs_mock {
-    return {
-        server_type => 'moo',
-        provider => 'me',
-    }
-}
-
-my %override;
-foreach my $key (qw(Base Server Client)) {
-    my $module_sub = "Respite::$key\::_configs";
-    ok($override{$key} = Sub::Override->new($module_sub => \&_configs_mock), "Override $module_sub")
-}
+ok(defined &setup_test_server, "setup_test_server imported");
+ok(eval { require config }, "fake config module ready");
+ok(eval { require Bam }, "fake Bam module ready");
 
 my ($client, $server) = setup_test_server({
     service  => 'bam', # necessary because we directly subclassed Respite::Server
@@ -49,32 +35,46 @@ ok($server, 'Got server');
 ok($client2, 'Got client2');
 ok($server2, 'Got server2');
 
-my $resp = eval {$client->foo };
+my $resp = eval { $client->foo };
 is($resp->{'BAR'}, 1, 'Call api method foo, server no pass, client no pass') or diag(explain($resp));
 
 $client->{'pass'} = 'fred';
-$resp = eval {$client->foo };
+$resp = eval { $client->foo };
 my $e = $@;
 is($resp->{'BAR'}, 1, 'Call api method foo, server no pass, client uses pass') or diag(explain([$e,$resp]));
 
-$resp = eval {$client2->foo };
+$resp = eval { $client2->foo };
 $e = $@;
 is($resp->{'BAR'}, 1, 'Call api method foo, server uses pass, client uses pass') or diag(explain([$e,$resp]));
 
 delete $client2->{'pass'};
-$resp = eval {$client2->foo };
+$resp = eval { $client2->foo };
 $e = $@;
 cmp_ok($e, '=~', 'Invalid client auth', 'Call api method foo, server uses pass, client no pass') or diag(explain([$e,$resp]));
 
 $client2->{'pass'} = 'not correct';
-$resp = eval {$client2->foo };
+$resp = eval { $client2->foo };
 $e = $@;
 cmp_ok($e, '=~', 'Invalid client auth', 'Call api method foo, server uses pass, client bad pass') or diag(explain([$e,$resp]));
 
 {
+    # Instantiate a fake "config" module for testing:
+    package config;
+    BEGIN { $INC{"config.pm"} = "config.pm"; }
+    our %config = (
+        server_type => 'moo',
+        provider => 'me',
+    );
+    sub load {
+        return \%config;
+    }
+}
+
+{
+    # Create a test server "Bam" module:
     package Bam;
+    BEGIN { $INC{"Bam.pm"} = "Bam.pm"; }
     use strict;
-    use Throw qw(throw);
     use base qw(Respite::Base);
     sub api_meta {
         return shift->{'api_meta'} ||= {
