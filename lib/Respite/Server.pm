@@ -281,6 +281,9 @@ sub send_response {
         # Otherwise, this is a normal CGI process.
         # XXX - Do we need to also convert "Status" header for the special NPH format?
         print "HTTP/1.0 200 OK\r\n" if ($ENV{SCRIPT_FILENAME} // "") =~ m{/nph-[^/]+($|\s)};
+        for my $h (@extra) {
+            print "$h->[0]: $h->[1]\r\n";
+        }
         print "Content-Type: ".$self->content_type."\r\nContent-Length: ".length($str)."\r\nContent-Type: ".$self->content_type."\r\n\r\n",$str;
     }
     return 1;
