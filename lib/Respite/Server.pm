@@ -6,13 +6,9 @@ use strict;
 use warnings;
 our @ISA;
 use base 'Respite::Common'; # Default _configs
-use JSON ();
 use Digest::MD5 qw(md5_hex);
 use Throw qw(throw);
 use Time::HiRes qw(sleep);
-
-my $JSON;
-sub json { $JSON ||= JSON->new->utf8->allow_unknown->allow_nonref->allow_blessed->convert_blessed->canonical }
 
 sub server_name {      $_[0]->{'server_name'}      ||= ($0 =~ m|/(\w+)$|x) ? $1 : throw 'Missing server_name' }
 sub revision {         $_[0]->{'revision'}         ||= eval { $_[0]->dispatch_class->_revision } || '-' }

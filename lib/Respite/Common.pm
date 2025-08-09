@@ -13,6 +13,8 @@ package Respite::Common;
 
     sub xkey1 { return shift->_configs->{xxx_key} || "unknown" }
 
+    sub parse1 { return shift->json->decode(shift) }
+
 =cut
 
 use strict;
@@ -22,6 +24,11 @@ sub new {
     my ($class, $args) = @_;
     return bless {%{$args || {}}}, $class;
 }
+
+our $js;
+sub json { $js ||= eval { require JSON; JSON->new->utf8->allow_unknown->allow_nonref->convert_blessed->canonical } || die "Could not load JSON: $@" }
+our $jp;
+sub jsop { $jp ||= eval { require JSON; JSON->new->utf8->allow_unknown->allow_nonref->convert_blessed->canonical->pretty } || die "Could not load JSON: $@" }
 
 our $config;
 sub _configs {

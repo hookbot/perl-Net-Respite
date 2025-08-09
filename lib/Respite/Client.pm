@@ -6,13 +6,8 @@ use strict;
 use warnings;
 use base 'Respite::Common'; # Default _configs
 use IO::Socket::SSL ();
-use JSON ();
 use Time::HiRes qw(sleep);
 use Digest::MD5 qw(md5_hex);
-
-our ($pretty, $js, $jp);
-sub json { $js ||= JSON->new->utf8->allow_unknown->allow_nonref->convert_blessed->canonical }
-sub jsop { $jp ||= JSON->new->utf8->allow_unknown->allow_nonref->convert_blessed->canonical->pretty }
 
 BEGIN {
     if (! eval { require Throw }) {

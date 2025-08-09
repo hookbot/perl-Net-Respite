@@ -6,7 +6,6 @@ use strict;
 use warnings;
 use base 'Respite::Common'; # Default _configs and config
 use autouse 'Respite::Validate' => qw(validate);
-use JSON ();
 use Scalar::Util qw(blessed weaken);
 use Time::HiRes ();
 use Throw qw(throw);
@@ -14,8 +13,6 @@ use vars qw($VERSION);
 $VERSION = 0.22;
 
 our $max_recurse = 10;
-my $JSON;
-sub json { $JSON ||= JSON->new->utf8->allow_unknown->allow_nonref->allow_blessed->convert_blessed->canonical }
 
 sub SHARE {}
 
