@@ -4,6 +4,7 @@ package Respite::Base;
 
 use strict;
 use warnings;
+use base 'Respite::Common'; # Default _configs and config
 use autouse 'Respite::Validate' => qw(validate);
 use JSON ();
 use Scalar::Util qw(blessed weaken);
@@ -12,7 +13,6 @@ use Throw qw(throw);
 use vars qw($VERSION);
 $VERSION = 0.22;
 
-our $config;
 our $max_recurse = 10;
 my $JSON;
 sub json { $JSON ||= JSON->new->utf8->allow_unknown->allow_nonref->allow_blessed->convert_blessed->canonical }
@@ -23,20 +23,6 @@ sub new {
 }
 
 sub SHARE {}
-
-sub _configs { $config || (eval { require config } or $config::config{'failed_load'} = $@) && config->load }
-
-sub config {
-    my ($self, $key, $def, $name) = @_;
-    $name ||= (my $n = $self->base_class || ref($self) || $self || '') =~ /(\w+)$/ ? lc $1 : '';
-    my $c = $self->_configs($name);
-    return exists($self->{$key}) ? $self->{$key}
-        : exists($c->{"${name}_service_${key}"}) ? $c->{"${name}_service_${key}"}
-        : (ref($c->{"${name}_service"}) && exists $c->{"${name}_service"}->{$key}) ? $c->{"${name}_service"}->{$key}
-        : exists($c->{"${name}_${key}"}) ? $c->{"${name}_${key}"}
-        : (ref($c->{$name}) && exists $c->{$name}->{$key}) ? $c->{$name}->{$key}
-        : ref($def) eq 'CODE' ? $def->($self) : $def;
-}
 
 ###----------------------------------------------------------------###
 

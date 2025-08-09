@@ -4,12 +4,12 @@ package Respite::Client;
 
 use strict;
 use warnings;
+use base 'Respite::Common'; # Default _configs
 use IO::Socket::SSL ();
 use JSON ();
 use Time::HiRes qw(sleep);
 use Digest::MD5 qw(md5_hex);
 
-our $config;
 our ($pretty, $js, $jp);
 sub json { $js ||= JSON->new->utf8->allow_unknown->allow_nonref->convert_blessed->canonical }
 sub jsop { $jp ||= JSON->new->utf8->allow_unknown->allow_nonref->convert_blessed->canonical->pretty }
@@ -61,8 +61,6 @@ sub _local_call {
     } || (ref($@) eq 'HASH' && $@->{'error'} ? $@ : {error => "Trouble running $name service method", service => $name});
     return $self->_result({method => $method, args => $args, data => $hash, service => $name, url => 'local'});
 }
-
-sub _configs { $config || (eval { require config } or $config::config{'failed_load'} = $@) && ($config = config->load) }
 
 sub config {
     my ($self, $key, $def, $name) = @_;

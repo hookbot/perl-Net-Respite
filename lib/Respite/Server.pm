@@ -5,12 +5,11 @@ package Respite::Server;
 use strict;
 use warnings;
 our @ISA;
+use base 'Respite::Common'; # Default _configs
 use JSON ();
 use Digest::MD5 qw(md5_hex);
 use Throw qw(throw);
 use Time::HiRes qw(sleep);
-
-our $config;
 
 my $JSON;
 sub json { $JSON ||= JSON->new->utf8->allow_unknown->allow_nonref->allow_blessed->convert_blessed->canonical }
@@ -41,8 +40,6 @@ sub new {
 }
 
 sub new_args {}
-
-sub _configs { $config || (eval { require config } or $config::config{'failed_load'} = $@) && ($config = config->load) }
 
 sub config {
     my ($self, $key, $def, $name) = @_;

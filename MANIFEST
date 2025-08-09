@@ -12,6 +12,7 @@ lib/Respite/Client.pm
 lib/Respite/Client.pod
 lib/Respite/CommandLine.pm
 lib/Respite/CommandLine.pod
+lib/Respite/Common.pm
 lib/Respite/Server.pm
 lib/Respite/Server.pod
 lib/Respite/Server/Test.pm
