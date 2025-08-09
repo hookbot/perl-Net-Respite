@@ -255,6 +255,7 @@ sub content_type { shift->{'content_type'} ||= 'application/json' }
 
 sub send_response {
     my ($self, $str) = @_;
+    $str =~ s/\s*$/\r\n/ if $self->content_type =~ m{^(?:text/|application/json$)};
     my @extra = $self->{'extra_headers'} ? @{ $self->{'extra_headers'} } : ();
     if ($self->{'is_psgi'}) {
         return [200, [(map {$_->[0], $_->[1]} @extra), 'Content-type' => $self->content_type, 'Content-length' => length($str)], [$str]];
