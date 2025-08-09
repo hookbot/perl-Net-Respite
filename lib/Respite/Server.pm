@@ -265,7 +265,7 @@ sub send_response {
     } elsif (my $c = $self->{'server'}->{'client'}) { # accelerate output header generation under Net::Server
         my $ri = $self->{'request_info'};
         my $out = "HTTP/1.0 200 OK\015\012";
-         foreach my $row (@{ $self->http_base_headers }, @extra, ['Content-length', length($str)], ['Content-type', $self->content_type]) {
+        foreach my $row (@{ $self->http_base_headers }, @extra, ['Content-length', length($str)], ['Content-type', $self->content_type]) {
             $out .= "$row->[0]: $row->[1]\015\012";
             push @{ $ri->{'response_headers'} }, $row;
         }
