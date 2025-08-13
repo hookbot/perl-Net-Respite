@@ -25,7 +25,7 @@ sub new {
     return $self if $self->{'non_daemon'} || ($ENV{'MOD_PERL'} && ! $self->{'force_daemon'});
     require Net::Server;
     require Net::Server::HTTP;
-    unshift @ISA, qw(Net::Server::HTTP);
+    unshift @ISA, qw(Net::Server::HTTP) if !$self->isa(qw(Net::Server::HTTP));;
     throw 'We need a more recent Net::Server revision', {v => $Net::Server::VERSION} if $Net::Server::VERSION < 2.007;
     $self->json; # vivify before fork
     my $server = $class->SUPER::new(%$self, %{ $self->server_args });
