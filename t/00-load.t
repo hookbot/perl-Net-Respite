@@ -2,9 +2,10 @@
 
 use strict;
 use warnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 # Libraries for Respite
+require_ok('Respite');
 require_ok('Respite::AutoDoc');
 require_ok('Respite::Base');
 require_ok('Respite::Client');

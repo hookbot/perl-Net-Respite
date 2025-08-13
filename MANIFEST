@@ -5,6 +5,7 @@ META.json
 META.yml
 Makefile.PL
 README
+lib/Respite.pm
 lib/Respite/AutoDoc.pm
 lib/Respite/Base.pm
 lib/Respite/Base.pod
