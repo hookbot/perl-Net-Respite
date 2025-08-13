@@ -149,18 +149,19 @@ sub print_data {
             print Data::Dumper::Dumper($_) for $ENV{'SHOW_META'} ? $meta : (), $args, $data;
         }
     } else {
+        my $p = PrettyTable->new({auto_collapse => 1});
         if ($ENV{'SHOW_META'}) {
             print "Meta:\n";
-            print Text::PrettyTable->tablify($meta, {auto_collapse => 1});
+            print $p->tablify($meta);
         }
         print "Arguments:\n";
-        print Text::PrettyTable->tablify($args, {auto_collapse => 1});
+        print $p->tablify($args);
         if ((scalar(keys %$data) == 1 || $data->{'n_pages'} && $data->{'n_pages'} == 1) && $data->{'rows'}) {
             print "Data Rows:\n";
-            print Text::PrettyTable->tablify($data->{'rows'}, {auto_collapse => 1});
+            print $p->tablify($data->{'rows'});
         } else {
             print "Data:\n";
-            print Text::PrettyTable->tablify($data, {auto_collapse => 1});
+            print $p->tablify($data);
         }
     }
 }
