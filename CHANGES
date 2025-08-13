@@ -1,4 +1,19 @@
 -----------------------------------------
+version 0.22 at 2025-08-13 17:00:00 +0000
+-----------------------------------------
+
+  Author: HookBot <hookbot@github.com>
+
+  Various distribution clean-ups.
+  Fix Run-Time Crashing:
+    Can't locate object method "load" via package
+    "config" at Respite/Common.pm line 22.
+  Optimization: Load JSON just-in-time.
+  Get rid of all Sub::Override hacks.
+  Support NPH (non-parsed headers) CGI too
+  Honor {_extra_headers} setting for CGI too
+
+-----------------------------------------
 version 0.21 at 2025-08-04 23:00:00 +0000
 -----------------------------------------
 
