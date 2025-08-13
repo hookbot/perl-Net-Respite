@@ -135,7 +135,7 @@ sub print_data {
     if ($ENV{'YAML'}) {
         eval { require YAML } || throw "Could not load YAML for output", {msg => $@};
         print YAML->new->Dump($data);
-    } elsif ($ENV{'JSON'} || ! eval { require PrettyTable }) {
+    } elsif ($ENV{'JSON'} || ! eval { require Text::PrettyTable }) {
         eval { require JSON } || throw "Could not load JSON for output", {msg => $@};
         my $json = JSON->new->utf8->allow_nonref->convert_blessed->pretty->canonical;
         print "meta = ".$json->encode($meta) if $ENV{'SHOW_META'};
@@ -151,16 +151,16 @@ sub print_data {
     } else {
         if ($ENV{'SHOW_META'}) {
             print "Meta:\n";
-            print PrettyTable->plain_text($meta, {auto_collapse => 1});
+            print Text::PrettyTable->tablify($meta, {auto_collapse => 1});
         }
         print "Arguments:\n";
-        print PrettyTable->plain_text($args, {auto_collapse => 1});
+        print Text::PrettyTable->tablify($args, {auto_collapse => 1});
         if ((scalar(keys %$data) == 1 || $data->{'n_pages'} && $data->{'n_pages'} == 1) && $data->{'rows'}) {
             print "Data Rows:\n";
-            print PrettyTable->plain_text($data->{'rows'}, {auto_collapse => 1});
+            print Text::PrettyTable->tablify($data->{'rows'}, {auto_collapse => 1});
         } else {
             print "Data:\n";
-            print PrettyTable->plain_text($data, {auto_collapse => 1});
+            print Text::PrettyTable->tablify($data, {auto_collapse => 1});
         }
     }
 }

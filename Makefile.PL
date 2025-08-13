@@ -27,6 +27,7 @@ my %WriteMakefileArgs = (
     "JSON" => 0,
     "Net::Server" => 0,
     "Scalar::Util" => 0,
+    "Text::PrettyTable" => 0.03,
     "Throw" => 0,
     "Time::HiRes" => 0,
   },
