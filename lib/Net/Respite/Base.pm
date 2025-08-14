@@ -4,7 +4,7 @@ package Net::Respite::Base;
 
 use strict;
 use warnings;
-use base 'Net::Respite::Common'; # Default _configs and config
+use base 'Net::Respite::Common'; # Default _configs
 use autouse 'Net::Respite::Validate' => qw(validate);
 use Scalar::Util qw(blessed weaken);
 use Time::HiRes ();
@@ -13,6 +13,18 @@ use Throw qw(throw);
 our $max_recurse = 10;
 
 sub SHARE {}
+
+sub config {
+    my ($self, $key, $def, $name) = @_;
+    $name ||= (my $n = $self->base_class || ref($self) || $self || '') =~ /(\w+)$/ ? lc $1 : '';
+    my $c = $self->_configs($name);
+    return exists($self->{$key}) ? $self->{$key}
+        : exists($c->{"${name}_service_${key}"}) ? $c->{"${name}_service_${key}"}
+        : (ref($c->{"${name}_service"}) && exists $c->{"${name}_service"}->{$key}) ? $c->{"${name}_service"}->{$key}
+        : exists($c->{"${name}_${key}"}) ? $c->{"${name}_${key}"}
+        : (ref($c->{$name}) && exists $c->{$name}->{$key}) ? $c->{$name}->{$key}
+        : ref($def) eq 'CODE' ? $def->($self) : $def;
+}
 
 ###----------------------------------------------------------------###
 
