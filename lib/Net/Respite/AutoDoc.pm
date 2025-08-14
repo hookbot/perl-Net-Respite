@@ -1,4 +1,4 @@
-package Respite::AutoDoc;
+package Net::Respite::AutoDoc;
 
 use strict;
 use warnings;

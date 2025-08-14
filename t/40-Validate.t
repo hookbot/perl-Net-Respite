@@ -5,12 +5,12 @@ use warnings;
 use Test::More tests => 267;
 
 use FindBin qw($Bin);
-use_ok('Respite::Validate');
+use_ok('Net::Respite::Validate');
 
 my $v;
 my $e;
 
-sub validate { scalar Respite::Validate->new->validate(@_) }
+sub validate { scalar Net::Respite::Validate->new->validate(@_) }
 
 ### required
 $v = {foo => {required => 1, alias => 'ffoooo'}};

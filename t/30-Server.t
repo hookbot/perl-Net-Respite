@@ -5,14 +5,14 @@ use warnings;
 
 use Test::More tests => 12;
 
-use Respite::Server::Test qw(setup_test_server);
+use Net::Respite::Server::Test qw(setup_test_server);
 
 ok(defined &setup_test_server, "setup_test_server imported");
 ok(eval { require config }, "fake config module ready");
 ok(eval { require Bam }, "fake Bam module ready");
 
 my ($client, $server) = setup_test_server({
-    service  => 'bam', # necessary because we directly subclassed Respite::Server
+    service  => 'bam', # necessary because we directly subclassed Net::Respite::Server
     api_meta => 'Bam',    # ditto
     client_utf8_encoded => 1,
     flat => 1,
@@ -21,7 +21,7 @@ my ($client, $server) = setup_test_server({
 });
 
 my ($client2, $server2) = setup_test_server({
-    service  => 'bam', # necessary because we directly subclassed Respite::Server
+    service  => 'bam', # necessary because we directly subclassed Net::Respite::Server
     api_meta => 'Bam',    # ditto
     client_utf8_encoded => 1,
     flat => 1,
@@ -75,7 +75,7 @@ cmp_ok($e, '=~', 'Invalid client auth', 'Call api method foo, server uses pass, 
     package Bam;
     BEGIN { $INC{"Bam.pm"} = "Bam.pm"; }
     use strict;
-    use base qw(Respite::Base);
+    use base qw(Net::Respite::Base);
     sub api_meta {
         return shift->{'api_meta'} ||= {
             methods => {
@@ -92,11 +92,11 @@ __END__
 
 =head1 NAME
 
-Respite::Base.pm.t
+Net::Respite::Base.pm.t
 
 =head1 DEVEL
 
-If anything, this is more of an example of setup_test_server that is packaged in Respite::Server::Test.
+If anything, this is more of an example of setup_test_server that is packaged in Net::Respite::Server::Test.
 However, it is used for basic testing to see if the sub works or not.
 Typically, you should not override _configs. That may likely go away in this unit tests sometime in the future.
 

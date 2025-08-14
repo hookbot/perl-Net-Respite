@@ -1,6 +1,6 @@
 =head1 NAME
 
-Respite::Server - generic Respite based Respite server
+Net::Respite::Server - generic Respite based Respite server
 
 $Id: Server.pod,v 1.5 2013/09/17 17:51:34 paul Exp $
 
@@ -13,8 +13,8 @@ $Id: Server.pod,v 1.5 2013/09/17 17:51:34 paul Exp $
 
     #!/usr/bin/perl
     use lib qw(../lib);
-    use Respite::Server;
-    Respite::Server->run_commandline(
+    use Net::Respite::Server;
+    Net::Respite::Server->run_commandline(
         # server_name  => "foo_server", # not needed if file name is correct
         revision       => 1.1,
         dispatch_class => 'Foo',
@@ -25,7 +25,7 @@ $Id: Server.pod,v 1.5 2013/09/17 17:51:34 paul Exp $
 
 
     package FooServer;
-    use base qw(Respite::Server);
+    use base qw(Net::Respite::Server);
     sub server_name { 'foo_server' }
     sub revision { 1.1 }
     sub dispatch_class { 'Foo' }
@@ -37,8 +37,8 @@ $Id: Server.pod,v 1.5 2013/09/17 17:51:34 paul Exp $
 
     # OR
 
-    use Respite::Server;
-    Respite::Server->run_commandline(
+    use Net::Respite::Server;
+    Net::Respite::Server->run_commandline(
         server_name => 'foo_server',
         revision    => 1.1,
         dispatch_class => 'Foo',
@@ -76,7 +76,7 @@ Defaults to /var/log/$server_name/$server_name.access_log
 
 =item api_meta
 
-Name of the class, or hashref describing the dispatch services.  See L<Respite::Base> for more
+Name of the class, or hashref describing the dispatch services.  See L<Net::Respite::Base> for more
 information.
 
 =item group

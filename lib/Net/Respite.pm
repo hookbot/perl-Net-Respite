@@ -1,4 +1,4 @@
-package Respite;
+package Net::Respite;
 
 our $VERSION = 0.23;
 
@@ -8,7 +8,7 @@ our $VERSION = 0.23;
 
 =head1 NAME
 
-Respite - Representational State (Perl Iscool) Transfer Engine
+Net::Respite - Representational State (Perl Iscool) Transfer Engine
 
 =head1 DESCRIPTION
 

@@ -1,11 +1,11 @@
-package Respite::Base;
+package Net::Respite::Base;
 
-# Respite::Base - base class for Respite related modules that can be used from a server or commandline
+# Net::Respite::Base - base class for Respite related modules that can be used from a server or commandline
 
 use strict;
 use warnings;
-use base 'Respite::Common'; # Default _configs and config
-use autouse 'Respite::Validate' => qw(validate);
+use base 'Net::Respite::Common'; # Default _configs and config
+use autouse 'Net::Respite::Validate' => qw(validate);
 use Scalar::Util qw(blessed weaken);
 use Time::HiRes ();
 use Throw qw(throw);
@@ -55,13 +55,13 @@ sub run_method {
 
 sub _restrict {
     my ($class, $meth) = @_;
-    return 0 if __PACKAGE__->SUPER::can($meth); # any of the inherited methods from Respite::Base are not Respite methods
+    return 0 if __PACKAGE__->SUPER::can($meth); # any of the inherited methods from Net::Respite::Base are not Respite methods
     return $meth =~ /^_/;
 }
 
 sub AUTOLOAD {
     my $self = shift;
-    my $meth = $Respite::Base::AUTOLOAD =~ /::(\w+)$/ ? $1 : throw "Invalid method", {method => $Respite::Base::AUTOLOAD};
+    my $meth = $Net::Respite::Base::AUTOLOAD =~ /::(\w+)$/ ? $1 : throw "Invalid method", {method => $Net::Respite::Base::AUTOLOAD};
     throw "Self was not passed while looking up method", {method => $meth, trace => 1} if ! blessed $self;
     local $self->{'_autoload'}->{$meth} = ($self->{'_autoload'}->{$meth} || 0) + 1;
     throw "Recursive method lookup", {class => ref($self), method => $meth} if $self->{'_autoload'}->{$meth} > $max_recurse;
@@ -240,7 +240,7 @@ sub find_method {
 sub _load_lib_dir {
     my ($self, $NS) = @_;
     if ($NS eq '1') {
-        throw "lib_dirs cannot be 1 when accessed from Respite::Base directly" if ref($self) eq __PACKAGE__;
+        throw "lib_dirs cannot be 1 when accessed from Net::Respite::Base directly" if ref($self) eq __PACKAGE__;
         (my $file = ref($self).".pm") =~ s|::|/|g;
         (my $dir = $INC{$file} || '') =~ s|\.pm$|| or throw "Could not determine library path location for lib_dirs", {file => $file};
         $NS = {$dir => {pkg_prefix => ref($self)}};

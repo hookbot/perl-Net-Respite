@@ -1,10 +1,10 @@
-package Respite::Client;
+package Net::Respite::Client;
 
-# Respite::Client - Generic class for running remote services
+# Net::Respite::Client - Generic class for running remote services
 
 use strict;
 use warnings;
-use base 'Respite::Common'; # Default _configs
+use base 'Net::Respite::Common'; # Default _configs
 use IO::Socket::SSL ();
 use Time::HiRes qw(sleep);
 use Digest::MD5 qw(md5_hex);
@@ -167,7 +167,7 @@ sub _result {
     return bless $args, $self->_result_class;
 }
 
-sub _result_class { shift->{'result_class'} || 'Respite::Client::Result' }
+sub _result_class { shift->{'result_class'} || 'Net::Respite::Client::Result' }
 
 sub _encode_utf8_recurse {
     my $d = shift;
@@ -192,7 +192,7 @@ sub _decode_utf8_recurse {
 sub AUTOLOAD {
     my $self = shift;
     my $args = shift || {};
-    my $meth = $Respite::Client::AUTOLOAD =~ /::(\w+)$/ ? $1 : throw "Invalid method\n";
+    my $meth = $Net::Respite::Client::AUTOLOAD =~ /::(\w+)$/ ? $1 : throw "Invalid method\n";
     throw "Self was not passed while looking up method", {method => $meth, trace => 1} if ! ref $self;
     throw "Invalid ".$self->service_name." method \"$meth\"", {trace => 1} if !$self->_needs_remote($meth) && ! $self->can("__${meth}");
     my $code = sub { $_[0]->run_method($meth => $_[1]) };
@@ -207,14 +207,14 @@ sub run_commandline {
     my $class = shift;
     my $args = ref($_[0]) ? shift : {@_};
     my $self = ref($class) ? $class : $class->new({%$args});
-    require Respite::CommandLine;
-    Respite::CommandLine->run({dispatch_factory => sub { $self }});
+    require Net::Respite::CommandLine;
+    Net::Respite::CommandLine->run({dispatch_factory => sub { $self }});
 }
 
 ###----------------------------------------------------------------###
 
 {
-    package Respite::Client::Result;
+    package Net::Respite::Client::Result;
     use overload 'bool' => sub { ! shift->error }, '""' => \&as_string, fallback => 1;
     sub error     { shift->data->{'error'} }
     sub TO_JSON   { return {%{$_[0]}} }
@@ -222,9 +222,9 @@ sub run_commandline {
         my $self = shift;
         if (my $err = $self->error) {
             my $data = $self->data;
-            my $p    = defined($Respite::Client::pretty) ? $Respite::Client::pretty : $self->{'pretty'};
+            my $p    = defined($Net::Respite::Client::pretty) ? $Net::Respite::Client::pretty : $self->{'pretty'};
             local $data->{'error'};  delete $data->{'error'};
-            return !scalar keys %$self ? $err : "$err: ".($p ? Respite::Client::jsop():Respite::Client::json())->encode({%$data});
+            return !scalar keys %$self ? $err : "$err: ".($p ? Net::Respite::Client::jsop():Net::Respite::Client::json())->encode({%$data});
         }
         return "Called $self->{'service'} service method $self->{'method'}";
     }

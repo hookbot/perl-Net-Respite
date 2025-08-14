@@ -1,11 +1,11 @@
-package Respite::Server;
+package Net::Respite::Server;
 
-# Respite::Server - generic Respite based Respite server
+# Net::Respite::Server - generic Respite based Respite server
 
 use strict;
 use warnings;
 our @ISA;
-use base 'Respite::Common'; # Default _configs
+use base 'Net::Respite::Common'; # Default _configs
 use Digest::MD5 qw(md5_hex);
 use Throw qw(throw);
 use Time::HiRes qw(sleep);
@@ -57,9 +57,9 @@ sub dispatch_factory {
             throw "Specified class does not have a run_method method", {class => $meta} if ! $meta->can('run_method');
             sub { $meta->new(@_) };
         } else {
-            require Respite::Base;
-            Respite::Base->new({api_meta => $meta})->api_preload if $preload;
-            sub { Respite::Base->new({%{shift()}, api_meta => $meta}) };
+            require Net::Respite::Base;
+            Net::Respite::Base->new({api_meta => $meta})->api_preload if $preload;
+            sub { Net::Respite::Base->new({%{shift()}, api_meta => $meta}) };
         }
     };
 }
@@ -487,8 +487,8 @@ sub run_commandline {
     } else {
         my $args = ref($_[0]) ? shift : {@_};
         my $self = ref($class) ? $class : $class->new({%$args, non_daemon => 1});
-        require Respite::CommandLine;
-        Respite::CommandLine->run({dispatch_factory => $self->dispatch_factory});
+        require Net::Respite::CommandLine;
+        Net::Respite::CommandLine->run({dispatch_factory => $self->dispatch_factory});
     }
 
     exit 0;
@@ -667,7 +667,7 @@ sub cgidoc {
         transport => 'form-doc',
     });
 
-    my $class = $self->config(auto_doc_class => 'Respite::AutoDoc');
+    my $class = $self->config(auto_doc_class => 'Net::Respite::AutoDoc');
     (my $file = "$class.pm") =~ s|::|/|g;
     require $file;
     $class->new({

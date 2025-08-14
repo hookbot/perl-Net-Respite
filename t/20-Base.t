@@ -6,7 +6,7 @@ use Test::More qw(no_plan);
 use Test::Deep;
 use JSON ();
 use Throw qw(throw);
-use Respite::Base;
+use Net::Respite::Base;
 use Data::Debug qw(debug);
 
 use End;
@@ -15,7 +15,7 @@ my $dir = __FILE__.".testlib";
 my $end = end { rmtree $dir if -e $dir };
 mkdir $dir, or warn "Could not mkdir $dir: $!";
 open my $fh, '>', "$dir/MyMod.pm" or throw "Could not write $dir/MyMod.pm: $!";
-print $fh "package MyMod; use base 'Respite::Base'; sub __voom { return {VOOM => 1} }\n1;\n";
+print $fh "package MyMod; use base 'Net::Respite::Base'; sub __voom { return {VOOM => 1} }\n1;\n";
 mkdir "$dir/MyMod", or warn "Could not mkdir $dir/MyMod: $!";
 open $fh, '>', "$dir/MyMod/MySub.pm" or throw "Could not write $dir/MyMod/MySub.pm: $!";
 print $fh "package MyMod::MySub; use base 'MyMod'; our \$api_meta = {methods => {voom2 => 'voom2'}}; sub voom2 { return {VOOM2 => 1} }\n";
@@ -32,7 +32,7 @@ $file =~ s|^(?:.+/)?lib/||;
     package Bam;
     use strict;
     use Throw qw(throw);
-    use base qw(Respite::Base);
+    use base qw(Net::Respite::Base);
     sub api_meta {
         return shift->{'api_meta'} ||= {
             dispatch_type => 'cache',
@@ -84,7 +84,7 @@ $file =~ s|^(?:.+/)?lib/||;
     sub other {}
 
     package BingChild;
-    use base qw(Respite::Base);
+    use base qw(Net::Respite::Base);
     sub new { bless $_[1] || {}, $_[0] }
 #    sub api_meta { {methods => {bing_child => 'bing_child'}} }
     sub __four { {BING_CHILD => 1} }
@@ -96,20 +96,20 @@ $file =~ s|^(?:.+/)?lib/||;
 
 ###----------------------------------------------------------------###
 
-my $obj = eval { Respite::Base->new({api_meta => {}}) };
+my $obj = eval { Net::Respite::Base->new({api_meta => {}}) };
 my $out = eval { $obj->find_method } or diag "$@";
 is_deeply([sort keys %$out], [qw(--load-- hello hello__meta methods methods__meta)], 'Base lookup');
-is($out->{'hello'}, 'Respite::Base::__hello', "Correct lookup for hello");
+is($out->{'hello'}, 'Net::Respite::Base::__hello', "Correct lookup for hello");
 
 
-$obj = eval { Respite::Base->new({api_meta => {methods => {foo => 1, bar => 'bar', hello => 'myhello'}}}) };
+$obj = eval { Net::Respite::Base->new({api_meta => {methods => {foo => 1, bar => 'bar', hello => 'myhello'}}}) };
 $out = eval { $obj->find_method } or diag "$@";
 is_deeply([sort keys %$out], [qw(--load-- bar foo hello hello__meta methods methods__meta)], 'Base lookup');
 is($out->{'bar'}, 'bar', "Correct lookup for bar");
 is($out->{'foo'}, 1, "Correct lookup for foo");
 is($out->{'hello'}, 'myhello', "Correct lookup for hello");
 
-$obj = eval { Respite::Base->new({
+$obj = eval { Net::Respite::Base->new({
     api_meta => {
         methods => {
             foo => 1,
@@ -126,7 +126,7 @@ is_deeply([sort keys %$out], [qw(--load-- bang_child_five bar foo hello hello__m
 like($out->{'bang_child_five'}, qr/^CODE/, "Correct lookup for bang_child_five");
 
 
-$obj = eval { Respite::Base->new({api_meta => {namespaces => {bang_child => {dispatch_type => 'new'}}}}) };
+$obj = eval { Net::Respite::Base->new({api_meta => {namespaces => {bang_child => {dispatch_type => 'new'}}}}) };
 my $data = eval { $obj->bang_child_five };
 is($data->{'base'}, "$obj", 'Correct parent');
 my $id = $data->{'self'};
@@ -134,21 +134,21 @@ ok(!$obj->{'BangChild'}, "No cached child");
 $data = eval{ $obj->bang_child_five };
 isnt($data->{'self'}, $id, 'New child each time');
 
-$obj = eval { Respite::Base->new({api_meta => {namespaces => {bang_child => {dispatch_type => 'cache'}}}}) };
+$obj = eval { Net::Respite::Base->new({api_meta => {namespaces => {bang_child => {dispatch_type => 'cache'}}}}) };
 $data = eval{ $obj->bang_child_five };
 is_deeply($data, {BANG_CHILD => 1, self => "$obj->{'BangChild'}", base => "$obj"}, 'Correct caching');
 ok($obj->{'BangChild'}, "Has cached child");
 $data = eval{ $obj->bang_child_five };
 is_deeply($data, {BANG_CHILD => 1, self => "$obj->{'BangChild'}", base => "$obj"}, 'Correct caching');
 
-$obj = eval { Respite::Base->new({api_meta => {namespaces => {bang_child => {dispatch_type => 'morph'}}}}) };
+$obj = eval { Net::Respite::Base->new({api_meta => {namespaces => {bang_child => {dispatch_type => 'morph'}}}}) };
 $data = eval{ $obj->bang_child_five };
-(my $morph = "$obj") =~ s/^Respite::Base=/BangChild=/;
+(my $morph = "$obj") =~ s/^Net::Respite::Base=/BangChild=/;
 is_deeply($data, {BANG_CHILD => 1, self => $morph, base => $morph}, 'Correct caching');
 ok(!$obj->{'BangChild'}, "No cached child");
 
 
-$obj = eval { Respite::Base->new({
+$obj = eval { Net::Respite::Base->new({
     api_meta => {
         methods => {
             foo => 1,
@@ -192,7 +192,7 @@ val__meta)], 'Base lookup');
 ###----------------------------------------------------------------###
 
 $obj = eval { Bam->new } || diag "$@";
-ok($obj, "Created Respite::Base object");
+ok($obj, "Created Net::Respite::Base object");
 
 $out = eval { local $obj->api_meta->{'dispatch_type'} = 'cache'; $obj->methods } || diag "$@";
 is_deeply($out, {
@@ -243,7 +243,7 @@ $test->(@$_) for (
     package Nest;
     use strict;
     use Throw qw(throw);
-    use base qw(Respite::Base);
+    use base qw(Net::Respite::Base);
     sub foo__meta {{desc => 'nest foo'}}
     sub foo { {n=>__PACKAGE__} }
     sub api_meta {
@@ -270,7 +270,7 @@ $test->(@$_) for (
     }
 
     package NestB;
-    use base qw(Respite::Base);
+    use base qw(Net::Respite::Base);
     sub foo__meta {{desc => 'nest_b foo'}}
     sub foo { {n=>__PACKAGE__} }
 }

@@ -6,9 +6,9 @@ use 5.008000;
 use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
-  NAME => "Respite",
-  VERSION_FROM => "lib/Respite.pm",
-  ABSTRACT_FROM => "lib/Respite.pm",
+  NAME => "Net::Respite",
+  VERSION_FROM => "lib/Net/Respite.pm",
+  ABSTRACT_FROM => "lib/Net/Respite.pm",
   AUTHOR => 'Paul Seamons <paul@seamons.com>, Jason Hall <jayce@cpan.org>, Rob Brown <hookbot@github.com>',
   CONFIGURE_REQUIRES => {
     "ExtUtils::MakeMaker" => 0,

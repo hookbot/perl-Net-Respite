@@ -1,6 +1,6 @@
-package Respite::Validate;
+package Net::Respite::Validate;
 
-# Respite::Validate - lighter weight port of CGI::Ex::Validate
+# Net::Respite::Validate - lighter weight port of CGI::Ex::Validate
 
 use strict;
 use warnings;

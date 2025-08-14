@@ -1,8 +1,8 @@
-package Respite::CommandLine;
+package Net::Respite::CommandLine;
 
 =head1 NAME
 
-Respite::CommandLine - Provide an easy way to get commandline abstraction of Respite::Base
+Net::Respite::CommandLine - Provide an easy way to get commandline abstraction of Net::Respite::Base
 
 =cut
 
@@ -19,7 +19,7 @@ sub new {
 sub api_meta { shift->{'api_meta'} }
 sub dispatch_class { shift->{'dispatch_class'} }
 
-sub dispatch_factory { # this is identical to code in Respite::Server
+sub dispatch_factory { # this is identical to code in Net::Respite::Server
     my ($self, $preload) = @_;
     return $self->{'dispatch_factory'} ||= do {
         my $meta = $self->api_meta || $self->dispatch_class || throw "Missing one of api_meta or dispatch_class";
@@ -29,12 +29,12 @@ sub dispatch_factory { # this is identical to code in Respite::Server
             throw "Specified class does not have a run_method method", {class => $meta} if ! $meta->can('run_method');
             sub { $meta->new(@_) };
         } elsif ($meta->{'remote'}) {
-            require Respite::Client;
-            sub { Respite::Client->new({%{shift() || {}}, %$meta}) };
+            require Net::Respite::Client;
+            sub { Net::Respite::Client->new({%{shift() || {}}, %$meta}) };
         } else {
-            require Respite::Base;
-            Respite::Base->new({api_meta => $meta})->api_preload if $preload;
-            sub { Respite::Base->new({%{shift() || {}}, api_meta => $meta}) };
+            require Net::Respite::Base;
+            Net::Respite::Base->new({api_meta => $meta})->api_preload if $preload;
+            sub { Net::Respite::Base->new({%{shift() || {}}, api_meta => $meta}) };
         }
     };
 }
@@ -79,7 +79,7 @@ sub _run_method {
     local $args->{'_c'} = ['commandline'] if $obj->can('config') ? !$obj->config(no_trace => undef) : 1;
 
     local $obj->{'remote_ip'}   = local $obj->{'api_ip'} = ($ENV{'REALUSER'} || $ENV{'SUDO_USER'}) ? 'sudo' : 'cmdline';
-    local $obj->{'api_brand'}   = $ENV{'BRAND'} || $ENV{'PROV'} if $obj->isa('Respite::Base') && ($ENV{'BRAND'} || $ENV{'PROV'});
+    local $obj->{'api_brand'}   = $ENV{'BRAND'} || $ENV{'PROV'} if $obj->isa('Net::Respite::Base') && ($ENV{'BRAND'} || $ENV{'PROV'});
     local $obj->{'remote_user'} = $ENV{'REALUSER'} || $ENV{'SUDO_USER'} || $ENV{'REMOTE_USER'} || $ENV{'USER'} || (getpwuid($<))[0] || '-unknown-';
     local $obj->{'token'}       = $self->{'token'} || $ENV{'ADMIN_Respite_TOKEN'} if $self->{'token'} || $ENV{'ADMIN_Respite_TOKEN'};
     local $obj->{'transport'}   = 'cmdline';

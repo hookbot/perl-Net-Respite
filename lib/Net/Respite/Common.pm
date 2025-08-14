@@ -1,15 +1,15 @@
-package Respite::Common;
+package Net::Respite::Common;
 
 =pod
 
 =head1 NAME
 
-  Respite::Common - Common methods used internally
+  Net::Respite::Common - Common methods used internally
 
 =head1 SYNOPSIS
 
     package CustomModule;
-    use base 'Respite::Common';
+    use base 'Net::Respite::Common';
 
     sub xkey1 { return shift->_configs->{xxx_key} || "unknown" }
 

@@ -1,4 +1,4 @@
-package Respite::Server::Test;
+package Net::Respite::Server::Test;
 
 use strict;
 use warnings;
@@ -36,7 +36,7 @@ sub setup_test_server {
     my $flat        = exists($args->{'flat'})     ? 1 : 0;
 
     my $server = $args->{'server'} || do {
-        my $pkg = $args->{'server_class'} || 'Respite::Server';
+        my $pkg = $args->{'server_class'} || 'Net::Respite::Server';
         (my $file = "$pkg.pm") =~ s|::|/|g;
         eval { require $file } || throw "Could not require client library", {msg => $@};
         $pkg->new({
@@ -62,7 +62,7 @@ sub setup_test_server {
 
     my $encoded = exists($args->{'utf8_encoded'}) ? 1 : 0;
     my $client = $args->{'client'} || do {
-        my $pkg = $args->{'client_class'} || 'Respite::Client';
+        my $pkg = $args->{'client_class'} || 'Net::Respite::Client';
         (my $file = "$pkg.pm") =~ s|::|/|g;
         eval { require $file } || throw "Could not require client library", {msg => $@};
         $pkg->new({
@@ -138,10 +138,10 @@ __END__
 =head1 SYNOPSIS
 
     use Test::More tests => 2;
-    use Respite::Server::Test qw(setup_test_server);
+    use Net::Respite::Server::Test qw(setup_test_server);
 
     my $client = setup_test_server({
-        service  => 'bam', # necessary because we directly subclassed Respite::Server
+        service  => 'bam', # necessary because we directly subclassed Net::Respite::Server
         api_meta => 'Bam',    # ditto
         client_utf8_encoded => 1,
         flat => 1,
@@ -177,13 +177,13 @@ Optional - if not passed it will try and use api_meta and service.
 
 =item service
 
-Name of the service - typically only used if Respite::Server is used
+Name of the service - typically only used if Net::Respite::Server is used
 directly - otherwise it will default to the server_name of the server
 with _server removed.
 
 =item api_meta
 
-Only used if Respite::Server is used - information about the API itself.
+Only used if Net::Respite::Server is used - information about the API itself.
 
 =item client_utf8_encoded
 
@@ -229,7 +229,7 @@ Default undef.  Can pass in your own client object.
 
 =item client_class
 
-Default Respite::Class.  What API client to use.
+Default Net::Respite::Class.  What API client to use.
 
 =item user
 

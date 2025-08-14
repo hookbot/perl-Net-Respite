@@ -1,11 +1,11 @@
 # NAME
 
-Respite::Base - base class for Respite related modules that can be used from a server or commandline
+Net::Respite::Base - base class for Respite related modules that can be used from a server or commandline
 
 # SYNOPSIS
 
     package Foo;
-    use base qw(Respite::Base);
+    use base qw(Net::Respite::Base);
     my $meta = {lib_dirs => 1, dispatch_type => 'cache'};
     sub api_meta { $meta }
 
@@ -26,7 +26,7 @@ Respite::Base - base class for Respite related modules that can be used from a s
 
     use strict;
     use warnings;
-    use base qw(Respite::Base);
+    use base qw(Net::Respite::Base);
 
     # sub api_meta { {} }  # optional configuration
     sub api_meta {
@@ -55,15 +55,15 @@ Respite::Base - base class for Respite related modules that can be used from a s
 
     my $obj = Foo->new;
     $obj->run_method("foo", $args);
-    # will do logging and utf8 munging - used by Respite::Server or Respite::CommandLine
+    # will do logging and utf8 munging - used by Net::Respite::Server or Net::Respite::CommandLine
 
     $obj->foo($args); # no logging or utf8 munging
 
 
     ###----------------------------------------------------------------###
 
-    use Respite::Base;
-    my $obj = Respite::Base->new({
+    use Net::Respite::Base;
+    my $obj = Net::Respite::Base->new({
         api_meta => {
             methods => {
                 foo => 'bar',
@@ -77,7 +77,7 @@ Respite::Base - base class for Respite related modules that can be used from a s
 # Respite\_META
 
 The module can specify a api\_meta override, or a api\_meta hashref
-can be passed to Respite::Base->new.  The following keys are honored
+can be passed to Net::Respite::Base->new.  The following keys are honored
 from api\_meta.
 
 - methods
@@ -196,23 +196,23 @@ This is an outdated list from the \_Respite.pm import.
 
 - validate\_args
 
-    See [Respite::Validate](https://metacpan.org/pod/Respite%3A%3AValidate)
+    See [Net::Respite::Validate](https://metacpan.org/pod/Respite%3A%3AValidate)
 
 - verify\_admin
 
-    Uses Respite::Client to call the emp\_auth service and verify a passed
+    Uses Net::Respite::Client to call the emp\_auth service and verify a passed
     in token.
 
 - api\_preload
 
-    Called from Respite::Server when a server is being started.  This
+    Called from Net::Respite::Server when a server is being started.  This
     method can be used to pre load all necessary modules to avoid
     a penalty later on.  Note that any overrides should likely
     call ->SUPER::api\_preload as well.
 
-The following methods are normally set when called from Respite::Server
-or Respite::CommandLine.  If Respite::Base is used outside of these mediums,
-then the corresponding $self->{'propertyname'} values must be set
+The following methods are normally set when called from Net::Respite::Server
+or Net::Respite::CommandLine.  If Net::Respite::Base is used outside of these
+mediums, then the corresponding $self->{'propertyname'} values must be set
 during initialization in order to use these methods.  If namespaces
 are used, the child class will typically fail back and look at the
 \->base->method value if necessary.
@@ -220,8 +220,8 @@ are used, the child class will typically fail back and look at the
 - remote\_ip
 
     The IP on the client machine calling this service.  This is advisory.
-    Respite::Client will use cmdline for this value when called through
-    Respite::CommandLine on the remote box.
+    Net::Respite::Client will use cmdline for this value when called through
+    Net::Respite::CommandLine on the remote box.
 
 - remote\_user
 
@@ -229,15 +229,15 @@ are used, the child class will typically fail back and look at the
 
 - transport
 
-    Defaults to ''.  From Respite::Server it defaults to `json` (Respite),
+    Defaults to ''.  From Net::Respite::Server it defaults to `json` (Respite),
     `form` (Post variables), and `form-doc` (autodoc interface).  From
-    Respite::CommandLine it defaults to `cmdline`.  It is normal in web
+    Net::Respite::CommandLine it defaults to `cmdline`.  It is normal in web
     interfaces that this value should be set to `gui`.
 
 - api\_ip
 
     The IP used to talk to the service when used as an Respite server.  It will
-    be cmdline when called from Respite::CommandLine.
+    be cmdline when called from Net::Respite::CommandLine.
 
 - api\_brand
 
@@ -251,7 +251,7 @@ are used, the child class will typically fail back and look at the
 
 - is\_server
 
-    Set by Respite::CommandLine and Respite::Server.
+    Set by Net::Respite::CommandLine and Net::Respite::Server.
 
 - is\_local
 
@@ -270,8 +270,8 @@ are used, the child class will typically fail back and look at the
 
 Responses from called methods should typically be hashrefs of
 data.  These responses will be encoded by the appropriate system.
-Typically the encoding will be json (during Respite::Server), but possibly
-other forms (Perl, JSON, YAML, CSV) such as during Respite::CommandLine.
+Typically the encoding will be json (during Net::Respite::Server), but possibly
+other forms (Perl, JSON, YAML, CSV) such as during Net::Respite::CommandLine.
 
 Methods can also return psgi style responses though this is typically more
 rare.  (It allows for other encodings or page displays).
@@ -290,8 +290,8 @@ give additional information to the transport layer:
 - \_extra\_headers
 
     This should be an arrayref of arrayrefs containing key/val pairs.  When used
-    under Respite::Server, these will be sent as additional http headers.  When using
-    Respite::Client, the headers can be seen in the 'headers' property of a response
+    under Net::Respite::Server, these will be sent as additional http headers.  When using
+    Net::Respite::Client, the headers can be seen in the 'headers' property of a response
     object (non-flat).
 
         sub __some_method {
