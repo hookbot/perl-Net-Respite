@@ -6,16 +6,15 @@ use 5.008000;
 use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
+  NAME => "Respite",
   VERSION_FROM => "lib/Respite.pm",
   ABSTRACT_FROM => "lib/Respite.pm",
-  AUTHOR => 'Paul Seamons <paul\@seamons.com>, Jason Hall <jayce@cpan.org>, Rob Brown <hookbot@github.com>',
+  AUTHOR => 'Paul Seamons <paul@seamons.com>, Jason Hall <jayce@cpan.org>, Rob Brown <hookbot@github.com>',
   CONFIGURE_REQUIRES => {
     "ExtUtils::MakeMaker" => 0,
   },
-  DISTNAME => "Respite",
   LICENSE => "perl",
   MIN_PERL_VERSION => "5.008000",
-  NAME => "Respite",
   PREREQ_PM => {
     "CGI::Ex" => 0,
     "Data::Debug" => 0,
