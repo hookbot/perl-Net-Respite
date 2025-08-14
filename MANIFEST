@@ -20,6 +20,12 @@ lib/Net/Respite/Server/Test.pm
 lib/Net/Respite/Validate.pm
 lib/Net/Respite/Validate.pod
 t/00-load.t
+t/10-Common-json.t
+t/11-Common-noconfig.t
+t/12-Common-emptyconfigpkg.t
+t/13-Common-loadconfig.t
+t/14-Common-rawhashconfig.t
+t/15-Common-hashrefconfig.t
 t/20-Base.t
 t/30-Server.
 t/40-Validate.t
