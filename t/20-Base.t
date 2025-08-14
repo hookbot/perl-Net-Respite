@@ -2,16 +2,17 @@
 
 use strict;
 use warnings;
-use Test::More qw(no_plan);
+use Test::More tests => 40;
+use Cwd qw(abs_path);
+use File::Path qw(rmtree);
 use Test::Deep;
-use JSON ();
 use Throw qw(throw);
 use Net::Respite::Base;
 use Data::Debug qw(debug);
-
 use End;
-use File::Path qw(rmtree);
-my $dir = __FILE__.".testlib";
+
+my $file = __FILE__;
+my $dir = abs_path "$file.testlib";
 my $end = end { rmtree $dir if -e $dir };
 mkdir $dir, or warn "Could not mkdir $dir: $!";
 open my $fh, '>', "$dir/MyMod.pm" or throw "Could not write $dir/MyMod.pm: $!";
@@ -21,9 +22,9 @@ open $fh, '>', "$dir/MyMod/MySub.pm" or throw "Could not write $dir/MyMod/MySub.
 print $fh "package MyMod::MySub; use base 'MyMod'; our \$api_meta = {methods => {voom2 => 'voom2'}}; sub voom2 { return {VOOM2 => 1} }\n";
 close $fh;
 
-my $json = JSON->new->convert_blessed->allow_blessed->allow_nonref->canonical;
+my $json = Net::Respite::Base->json;
+ok($json, "JSON loaded");
 
-my $file = __FILE__;
 $file =~ s|^(?:.+/)?lib/||;
 
 ###----------------------------------------------------------------###
