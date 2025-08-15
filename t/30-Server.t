@@ -92,7 +92,7 @@ __END__
 
 =head1 NAME
 
-Net::Respite::Base.pm.t
+30-Server.t
 
 =head1 DEVEL
 
