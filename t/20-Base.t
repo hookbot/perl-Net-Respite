@@ -22,11 +22,6 @@ open $fh, '>', "$dir/MyMod/MySub.pm" or throw "Could not write $dir/MyMod/MySub.
 print $fh "package MyMod::MySub; use base 'MyMod'; our \$api_meta = {methods => {voom2 => 'voom2'}}; sub voom2 { return {VOOM2 => 1} }\n";
 close $fh;
 
-my $json = Net::Respite::Base->json;
-ok($json, "JSON loaded");
-
-$file =~ s|^(?:.+/)?lib/||;
-
 ###----------------------------------------------------------------###
 
 {
@@ -66,36 +61,49 @@ $file =~ s|^(?:.+/)?lib/||;
         $self->validate_args($args);
         return {ok => 1};
     }
+}
 
+{
     package FooChild;
     sub new { bless $_[1] || {}, $_[0] }
     sub one { {FOO_CHILD => 1} }
     sub one__meta { {desc => ''} }
+}
 
+{
     package BarChild;
     sub new { bless $_[1] || {}, $_[0] }
     sub two { {BAR_CHILD => 1} }
     sub two__meta { return {desc => "Hey", args => {}, resp => {}} }
+}
 
+{
     package BazChild;
     sub new { bless $_[1] || {}, $_[0] }
     sub three { {BAZ_CHILD => 1} }
     sub three__meta { {desc => '3m'} }
     sub __hey_non { {HEY_NON => 1} }
     sub other {}
+}
 
+{
     package BingChild;
     use base qw(Net::Respite::Base);
     sub new { bless $_[1] || {}, $_[0] }
 #    sub api_meta { {methods => {bing_child => 'bing_child'}} }
     sub __four { {BING_CHILD => 1} }
+}
 
+{
     package BangChild;
     sub new { bless $_[1] || {}, $_[0] }
     sub __five { {BANG_CHILD => 1, self => "$_[0]", base => "".($_[0]->{'base'}||'')} }
 }
 
 ###----------------------------------------------------------------###
+
+my $json = Bam->json;
+ok($json, "JSON loaded");
 
 my $obj = eval { Net::Respite::Base->new({api_meta => {}}) };
 my $out = eval { $obj->find_method } or diag "$@";
