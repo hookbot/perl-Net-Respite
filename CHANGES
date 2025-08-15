@@ -1,8 +1,19 @@
 -----------------------------------------
+version 0.23 at 2025-08-15 20:00:00 +0000
+-----------------------------------------
+
+  Author: Rob Brown <hookbot@github.com>
+
+  Distribution rearrangements.
+  Move Respite to Net::Respite namespace.
+  Add Net::Respite::Common tests.
+  Move ->config from Common back to Base.
+
+-----------------------------------------
 version 0.22 at 2025-08-13 17:00:00 +0000
 -----------------------------------------
 
-  Author: HookBot <hookbot@github.com>
+  Author: Rob Brown <hookbot@github.com>
 
   Various distribution clean-ups.
   Fix Run-Time Crashing:
