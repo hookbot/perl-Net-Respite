@@ -220,8 +220,8 @@ call ->SUPER::api_preload as well.
 =back
 
 The following methods are normally set when called from Net::Respite::Server
-or Net::Respite::CommandLine.  If Net::Respite::Base is used outside of these mediums,
-then the corresponding $self->{'propertyname'} values must be set
+or Net::Respite::CommandLine.  If Net::Respite::Base is used outside of these
+mediums, then the corresponding $self->{'propertyname'} values must be set
 during initialization in order to use these methods.  If namespaces
 are used, the child class will typically fail back and look at the
 ->base->method value if necessary.

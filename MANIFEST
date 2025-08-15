@@ -5,6 +5,8 @@ META.json
 META.yml
 Makefile.PL
 README
+README.md
+README.html
 lib/Net/Respite.pm
 lib/Net/Respite/AutoDoc.pm
 lib/Net/Respite/Base.pm

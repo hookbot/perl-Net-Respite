@@ -196,7 +196,7 @@ This is an outdated list from the \_Respite.pm import.
 
 - validate\_args
 
-    See [Net::Respite::Validate](https://metacpan.org/pod/Respite%3A%3AValidate)
+    See [Net::Respite::Validate](https://metacpan.org/pod/Net%3A%3ARespite%3A%3AValidate)
 
 - verify\_admin
 
