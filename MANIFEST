@@ -27,7 +27,7 @@ t/13-Common-loadconfig.t
 t/14-Common-rawhashconfig.t
 t/15-Common-hashrefconfig.t
 t/20-Base.t
-t/30-Server.
+t/30-Server.t
 t/40-Validate.t
 t/author-critic.t
 t/author-pod-syntax.t
