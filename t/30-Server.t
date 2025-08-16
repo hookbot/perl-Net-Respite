@@ -22,8 +22,8 @@ my ($client, $server, $resp, $e);
     # no password
 });
 
-ok($client, 'Got client no pass');
-ok($server, 'Got server no pass');
+ok($client, "Got client no pass port $client->{port}");
+ok($server, "Got server no pass port $server->{port}");
 
 $resp = eval { $client->foo };
 is($resp->{'BAR'}, 1, 'Call api method foo, server no pass, client no pass') or diag(explain($resp));
@@ -47,8 +47,8 @@ $client = $server = undef; # blow away the old server
     pass => 'fred',
 });
 
-ok($client, 'Got client uses pass');
-ok($server, 'Got server uses pass');
+ok($client, "Got client uses pass port $client->{port}");
+ok($server, "Got server uses pass port $server->{port}");
 
 $resp = eval {$client->foo };
 $e = $@;
